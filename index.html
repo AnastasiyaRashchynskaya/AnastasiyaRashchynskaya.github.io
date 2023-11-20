@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Storage Page</title>
+  </head>
+  <body>
+    <script type="module">
+      import {
+        init,
+        serverCallbacks,
+      } from "https://assets.stg.shoprunner.io/@shoprunner/shopping@pr305-merge/es6/index.js";
+      const shopping = init({
+        partnerCode: "DEFAULT",
+        pageType: "product",
+        callbacks: serverCallbacks(undefined),
+      });
+
+      shopping.auth.authorize({ prompt: "none" }).catch(() => console.log(""));
+    </script>
+    <h1>Component for testing work with browser Storages</h1>
+    <p>To check the console for logged information:</p>
+    <ul>
+      <li>
+        <strong>Windows:</strong> Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> +
+        <kbd>J</kbd> (in Chrome and Firefox) or <kbd>F12</kbd> (in Edge) to open
+        the console.
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <strong>macOS:</strong> Press <kbd>Option</kbd> + <kbd>Cmd ⌘</kbd> +
+        <kbd>J</kbd> (in Chrome and Firefox) or <kbd>Cmd ⌘</kbd> +
+        <kbd>Opt</kbd> + <kbd>C</kbd> (in Safari) to open the console.
+      </li>
+    </ul>
+    <sr-test-storage />
+  </body>
+</html>
