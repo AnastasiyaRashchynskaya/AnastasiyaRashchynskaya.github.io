@@ -4,21 +4,141 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test Storage Page</title>
-  </head>
-  <body>
-    <script type="module">
-      import {
-        init,
-        serverCallbacks,
-      } from "https://assets.stg.shoprunner.io/@shoprunner/shopping@pr305-merge/es6/index.js";
-      const shopping = init({
-        partnerCode: "DEFAULT",
-        pageType: "product",
-        callbacks: serverCallbacks(undefined),
+    <script src="https://cdn.jsdelivr.net/npm/post-robot@10.0.42/dist/post-robot.min.js"></script>
+    <script src="index.js"></script>
+    <script>
+      var isLocalStorage = false;
+      var isSessionStorage = false;
+
+      postRobot.on("getStorageAccessability", function (event) {
+        isLocalStorage = event.data.localStorageEnabled;
+        isSessionStorage = event.data.sessionStorageEnabled;
+        updateButtonVisibility();
       });
 
-      shopping.auth.authorize({ prompt: "none" }).catch(() => console.log(""));
+      function updateButtonVisibility() {
+        var localStorageButtons = document.querySelectorAll('.localStorageAction');
+        var sessionStorageButtons = document.querySelectorAll('.sessionStorageAction');
+        localStorageButtons.forEach(function (button) {
+          button.style.display = isLocalStorage ? "inline-block" : "none";
+        });
+        sessionStorageButtons.forEach(function (button) {
+          button.style.display = isSessionStorage ? "inline-block" : "none";
+        });
+        var localStorageMessage = document.getElementById(
+          "localStorageMessage"
+        );
+        localStorageMessage.textContent = isLocalStorage
+          ? "Local Storage"
+          : "Local Storage is not accessible";
+
+        var sessionStorageMessage = document.getElementById(
+          "sessionStorageMessage"
+        );
+        sessionStorageMessage.textContent = isSessionStorage
+          ? "Session Storage"
+          : "Session Storage is not accessible";
+      }
     </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var storage = window.init({
+          url: "https://staging-content.shoprunner.com/components/storageManager/index.html",
+        });
+        storage.generateReport();
+        document
+          .getElementById("writeCookie")
+          .addEventListener("click", function () {
+            storage.set("Cookie");
+          });
+        document
+          .getElementById("readCookie")
+          .addEventListener("click", function () {
+            storage.get("Cookie");
+          });
+        document
+          .getElementById("clearCookie")
+          .addEventListener("click", function () {
+            storage.clear("Cookie");
+          });
+        document
+          .getElementById("displayCookie")
+          .addEventListener("click", function () {
+            storage.getAll("Cookie");
+          });
+
+        document
+          .getElementById("writeLocalStorage")
+          .addEventListener("click", function () {
+            storage.set("LocalStorage");
+          });
+        document
+          .getElementById("readLocalStorage")
+          .addEventListener("click", function () {
+            storage.get("LocalStorage");
+          });
+        document
+          .getElementById("clearLocalStorage")
+          .addEventListener("click", function () {
+            storage.clear("LocalStorage");
+          });
+        document
+          .getElementById("displayLocalStorage")
+          .addEventListener("click", function () {
+            storage.getAll("LocalStorage");
+          });
+
+        document
+          .getElementById("writeSessionStorage")
+          .addEventListener("click", function () {
+            storage.set("SessionStorage");
+          });
+        document
+          .getElementById("readSessionStorage")
+          .addEventListener("click", function () {
+            storage.get("SessionStorage");
+          });
+        document
+          .getElementById("clearSessionStorage")
+          .addEventListener("click", function () {
+            storage.clear("SessionStorage");
+          });
+        document
+          .getElementById("displaySessionStorage")
+          .addEventListener("click", function () {
+            storage.getAll("SessionStorage");
+          });
+
+        document
+          .getElementById("writeIndexDB")
+          .addEventListener("click", function () {
+            storage.set("IndexDB");
+          });
+        document
+          .getElementById("readIndexDB")
+          .addEventListener("click", function () {
+            storage.get("IndexDB");
+          });
+        document
+          .getElementById("clearIndexDB")
+          .addEventListener("click", function () {
+            storage.clear("IndexDB");
+          });
+        document
+          .getElementById("displayIndexDB")
+          .addEventListener("click", function () {
+            storage.getAll("IndexDB");
+          });
+
+        document
+          .getElementById("generateReport")
+          .addEventListener("click", function () {
+            storage.generateReport();
+          });
+      });
+    </script>
+  </head>
+  <body>
     <h1>Component for testing work with browser Storages</h1>
     <p>To check the console for logged information:</p>
     <ul>
@@ -27,14 +147,37 @@
         <kbd>J</kbd> (in Chrome and Firefox) or <kbd>F12</kbd> (in Edge) to open
         the console.
       </li>
-    </ul>
-    <ul>
       <li>
         <strong>macOS:</strong> Press <kbd>Option</kbd> + <kbd>Cmd ⌘</kbd> +
         <kbd>J</kbd> (in Chrome and Firefox) or <kbd>Cmd ⌘</kbd> +
         <kbd>Opt</kbd> + <kbd>C</kbd> (in Safari) to open the console.
       </li>
     </ul>
-    <sr-test-storage />
+    <h2>Cookie</h2>
+    <button id="writeCookie">write Cookie</button>
+    <button id="readCookie">read Cookie</button>
+    <button id="clearCookie">clear Cookie</button>
+    <button id="displayCookie">getAll Cookie</button>
+
+    <h2 id="localStorageMessage">Local Storage</h2>
+    <button id="writeLocalStorage" class="localStorageAction">write LocalStorage</button>
+    <button id="readLocalStorage" class="localStorageAction">read LocalStorage</button>
+    <button id="clearLocalStorage" class="localStorageAction">clear LocalStorage</button>
+    <button id="displayLocalStorage" class="localStorageAction">getAll LocalStorage</button>
+
+    <h2 id="sessionStorageMessage">Session Storage</h2>
+    <button id="writeSessionStorage" class="sessionStorageAction">write SessionStorage</button>
+    <button id="readSessionStorage" class="sessionStorageAction">read SessionStorage</button>
+    <button id="clearSessionStorage" class="sessionStorageAction">clear SessionStorage</button>
+    <button id="displaySessionStorage" class="sessionStorageAction">getAll SessionStorage</button>
+
+    <h2>Index DB</h2>
+    <button id="writeIndexDB">write Index DB</button>
+    <button id="readIndexDB">read Index DB</button>
+    <button id="clearIndexDB">clear Index DB</button>
+    <button id="displayIndexDB">getAll Index DB</button>
+
+    <h2>Generate report</h2>
+    <button id="generateReport">Generate Report</button>
   </body>
 </html>
